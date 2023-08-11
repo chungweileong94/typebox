@@ -225,8 +225,11 @@ function TNumber(schema: Types.TNumber, references: Types.TSchema[], value: any)
   if (!IsNumber(value)) {
     return false
   }
-  if (IsDefined<number>(schema.multipleOf) && !(value % schema.multipleOf === 0)) {
-    return false
+  if (IsDefined<number>(schema.multipleOf)) {
+    const round = 1 / schema.multipleOf * 10;
+    if (!((value * round) % (schema.multipleOf * round) === 0)) {
+      return false
+    }
   }
   if (IsDefined<number>(schema.exclusiveMinimum) && !(value > schema.exclusiveMinimum)) {
     return false
